@@ -1,0 +1,95 @@
+version: '2'
+
+services:
+    chat_server:
+        image: silentprotest/lets-chat
+        build: chat/
+        networks:
+            - www
+            - chat_db
+        volumes:
+            - chat_config:/usr/src/app/config
+            - chat_uploads:/usr/src/app/uploads
+        environment:
+            - LCB_DATABASE_URI=mongodb://chat_mongo/letschat
+            - LCB_XMPP_ENABLE=true
+        ports:
+            - 5222:5222
+            - 81:8080
+        depends_on:
+            - chat_mongo
+        restart: always
+
+    chat_mongo:
+        image: jixer/rpi-mongo
+        networks:
+            - chat_db
+        volumes:
+            - chat_mongo_data:/data/db
+            - chat_mongo_config:/data/configdb
+        restart: always
+
+    video_server:
+        image: silentprotest/hublin
+        build: video/
+        networks:
+            - www
+            - video_db
+        environment:
+            - HUBLIN_REDIS_HOST=video_redis
+        ports:
+            - 82:8080
+        depends_on:
+            - video_redis
+            - video_mongo
+        restart: always
+
+    video_mongo:
+        image: jixer/rpi-mongo
+        networks:
+            - video_db
+        volumes:
+            - video_mongo_data:/data/db
+            - video_mongo_config:/data/configdb
+        restart: always
+
+    video_redis:
+        image: armhf/redis
+        networks:
+            - video_db
+        volumes:
+            - video_redis_data:/data
+        restart: always
+
+    www:
+        image: armhfbuild/nginx
+        networks:
+            - www
+        volumes:
+            - ./www/conf.d/:/etc/nginx/conf.d/:ro
+            - ./www/html:/usr/share/nginx/html:ro
+            - ./www/silentprotest.local.crt:/ssl.crt:ro
+            - ./www/silentprotest.local.key:/ssl.key:ro
+            - www_cache:/var/cache/nginx
+        ports:
+            - 80:80
+            - 443:443
+        restart: always
+
+
+networks:
+    chat_db:
+    video_db:
+    www:
+
+volumes:
+    chat_config: {}
+    chat_uploads: {}
+    chat_mongo_data: {}
+    chat_mongo_config: {}
+    video_mongo_data: {}
+    video_mongo_config: {}
+    video_redis_data: {}
+    www_config: {}
+    www_cache: {}
+
