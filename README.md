@@ -21,7 +21,7 @@ sudo apt upgrade
 
 ### Configure Rasbian
 
-Run Raspbian Config tool:
+Run Raspbian config tool:
 
 ```
 sudo raspi-config

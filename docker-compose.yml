@@ -1,6 +1,33 @@
 version: '2'
 
 services:
+     
+    stream_icecast:
+        image: silentprotest/icecast
+        build: icecast
+        networks:
+            - www
+            - stream
+        volumes:
+            - ./icecast/icecast.xml:/etc/icecast2/icecast2.xml:ro
+        ports:
+            - 83:8000
+        restart: always
+
+    stream_liquidsoap:
+        image: silentprotest/liquidsoap
+        build: liquidsoap/
+        networks:
+            - stream
+        volumes:
+             - ./liquidsoap/radio.liq:/radio.liq:ro
+             - ./media/:/media/radio:ro
+        ports:
+            - 84:8005
+        depends_on:
+            - stream_icecast
+        restart: always
+
     chat_server:
         image: silentprotest/lets-chat
         build: chat/
@@ -80,6 +107,7 @@ services:
 networks:
     chat_db:
     video_db:
+    stream:
     www:
 
 volumes:
