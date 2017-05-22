@@ -13,3 +13,5 @@ docker rm -v $(docker ps -a --format '{{.Names}}' | grep $PREFIX)
 echo "Removing Volumes"
 docker volume rm $(docker volume ls -q | grep $PREFIX)
 
+echo "Removing Networks"
+docker network rm $(docker network ls --format '{{.Name}}' | grep $PREFIX)
