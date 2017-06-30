@@ -7,7 +7,8 @@ Download [Rasbian Lite](https://www.raspberrypi.org/downloads/raspbian/).
 Install to SD card:
 
 ```
-dd if=2017-04-10-raspbian-jessie-lite.img of=/dev/mmcblk0 bs=4M status=progress
+sudo dd if=2017-04-10-raspbian-jessie-lite.img of=/dev/mmcblk0 bs=4M status=progress
+sync
 ```
 
 ## Setup Raspbian
@@ -57,7 +58,7 @@ iface eth0 inet dhcp
 
 auto eth0:0
 iface eth0:0 inet static
-address 192.168.1.12
+address 192.168.1.6
 netmask 255.255.255.0
 ```
 
@@ -92,6 +93,13 @@ sudo pip install docker-compose
 ```
 
 ## Setup Silent Protest Services
+
+Clone this repository
+```
+git clone https://github.com/SilentProtest/docker.git silentprotest
+cd silentprotest
+```
+
 
 Pull remote pre-built and base images
 
