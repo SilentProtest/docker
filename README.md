@@ -65,6 +65,13 @@ netmask 255.255.255.0
 With this configuration the Pi will get its default route and nameservers over DHCP, but will always have a static IP for us to use if we do not know its DHCP address.
 Additionally this will allow us to distribute load over multiple Pis on the same network in the future.
 
+
+#### Setup Hostnames
+
+You should configure your network's DNS servers to return the IP address of the PI `192.168.1.6` for the domains `party.silentprotest.io`, `chat.silentprotest.io`, and `video.silentprotest.io`.
+
+If you want to use another domain be sure to get the correct SSL certificates and update the NXINX configuration files.
+
 ## Reboot
 
 `sudo reboot`
@@ -120,7 +127,7 @@ Generate HTTPS SSL certificates. [More information](www/README.md)
 
 Clone [Party](https://github.com/silentprotest/party) UI Repo
 ```
-git clone --depth 1  https://github.com/SilentProtest/party.git www/party
+git clone --depth 1 https://github.com/SilentProtest/party.git www/party
 ```
 
 Start all services
