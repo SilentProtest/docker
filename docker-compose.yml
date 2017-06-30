@@ -1,5 +1,9 @@
 version: '2'
 
+
+
+
+
 services:
      
     stream_icecast:
@@ -95,8 +99,8 @@ services:
         volumes:
             - ./www/conf.d/:/etc/nginx/conf.d/:ro
             - ./www/html:/usr/share/nginx/html:ro
-            - ./www/silentprotest.local.crt:/ssl.crt:ro
-            - ./www/silentprotest.local.key:/ssl.key:ro
+            - ./www/fullchain.pem:/ssl.crt:ro
+            - ./www/privkey.pem:/ssl.key:ro
             - www_cache:/var/cache/nginx
         ports:
             - 80:80
