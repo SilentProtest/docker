@@ -96,7 +96,7 @@ sudo pip install docker-compose
 
 Clone this repository
 ```
-git clone https://github.com/SilentProtest/docker.git silentprotest
+git clone --depth 1 https://github.com/SilentProtest/docker.git silentprotest
 cd silentprotest
 ```
 
@@ -114,7 +114,14 @@ Building the images will also require you to clone this repo with the `--recursi
 docker-compose build
 ```
 
+
 Generate HTTPS SSL certificates. [More information](www/README.md)
+
+
+Clone [Party](https://github.com/silentprotest/party) UI Repo
+```
+git clone --depth 1  https://github.com/SilentProtest/party.git www/party
+```
 
 Start all services
 

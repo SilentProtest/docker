@@ -1,9 +1,5 @@
 version: '2'
 
-
-
-
-
 services:
      
     stream_icecast:
@@ -98,7 +94,7 @@ services:
             - www
         volumes:
             - ./www/conf.d/:/etc/nginx/conf.d/:ro
-            - ./www/html:/usr/share/nginx/html:ro
+            - ./www/party/html:/usr/share/nginx/html:ro
             - ./www/fullchain.pem:/ssl.crt:ro
             - ./www/privkey.pem:/ssl.key:ro
             - www_cache:/var/cache/nginx
