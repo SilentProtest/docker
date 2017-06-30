@@ -134,3 +134,7 @@ Optionally, watch the logs
 ```
 docker-compose logs
 ```
+
+### Reset: Nuke everything and start over
+
+At any time you can run `reset.sh` to remove all docker containers volumes and networks.
