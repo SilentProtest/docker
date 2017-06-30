@@ -68,7 +68,7 @@ Additionally this will allow us to distribute load over multiple Pis on the same
 
 #### Setup Hostnames
 
-You should configure your network's DNS servers to return the IP address of the PI `192.168.1.6` for the domains `party.silentprotest.io`, `chat.silentprotest.io`, and `video.silentprotest.io`.
+You should configure your network's DNS servers to return the IP address of the PI `192.168.1.6` for the domains `party.silentprotest.io`, `chat.party.silentprotest.io`, and `video.party.silentprotest.io`.
 
 If you want to use another domain be sure to get the correct SSL certificates and update the NXINX configuration files.
 
