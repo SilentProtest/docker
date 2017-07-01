@@ -1,62 +1,31 @@
 #!/usr/bin/liquidsoap
 
-# Example
-# Need to finish this config
+# Documentation:
 # http://liquidsoap.fm/doc-dev/quick_start.html
 # http://liquidsoap.fm/doc-dev/complete_case.html
 # http://liquidsoap.fm/doc-dev/cookbook.html
 
-# Lines starting with # are comments, they are ignored.
-
-# Put the log file in some directory where
-# you have permission to write.
-set("log.file.path","/tmp/<script>.log")
-# Print log messages to the console,
-# can also be done by passing the -v option to liquidsoap.
+# print log messages to the console,
 set("log.stdout", true)
-# Use the telnet server for requests
-set("server.telnet", true)
+# don't use the telnet server for requests
+set("server.telnet", false)
 
-# A bunch of files and playlists,
-# supposedly all located in the same base dir.
+# backup stream if nobody is live streaming
+backup_stream = mksafe(playlist("/media/"))
 
-default = single("~/radio/default.ogg")
+# primary input is icecast from DJ
+live_stream = input.http("http://stream_icecast:8000/dj")
 
-day     = playlist("~/radio/day.pls")
-night   = playlist("~/radio/night.pls")
-jingles = playlist("~/radio/jingles.pls")
+# if live stream is down, use backup_stream
+full_stream = fallback(track_sensitive=false, [live_stream, backup_stream])
 
-clock   = single("~/radio/clock.ogg")
-#start   = single("~/radio/live_start.ogg")
-#stop    = single("~/radio/live_stop.ogg")
+# mono
+full_stream = mean(full_stream)
 
-# Play user requests if there are any,
-# otherwise one of our playlists,
-# and the default file if anything goes wrong.
-radio = fallback([ request.queue(id="request"),
-                    switch([({ 6h-22h }, day),
-                            ({ 22h-6h }, night)]),
-                    default])
-# Add the normal jingles
-radio = random(weights=[1,5],[ jingles, radio ])
-# And the clock jingle
-radio = add([radio, switch([({0m0s},clock)])])
+# clean transitions
+full_stream = smart_crossfade(start_next=0.5, full_stream)
 
-# Add the ability to relay live shows
-full =
-  fallback(track_sensitive=false,
-           [input.http("http://localhost:8000/live.ogg"),
-            radio])
-
-# Output the full stream in OGG and MP3
-output.icecast(%mp3, 
-  host="localhost",port=8000,password="hackme",
-  mount="radio",full)
-output.icecast(%vorbis, 
-  host="localhost",port=8000,password="hackme",
-  mount="radio.ogg",full)
-
-# Output the stream without live in OGG
-output.icecast(%vorbis, 
-  host="localhost",port=8000,password="hackme",
-  mount="radio_nolive.ogg",radio)
+# transcode to mp3 and send to icecast
+output.icecast(%mp3(bitrate=128, stereo=false), 
+  host="stream_icecast", port=8000, password="love",
+  mount="live", full_stream)

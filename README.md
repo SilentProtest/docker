@@ -145,3 +145,15 @@ docker-compose logs
 ### Reset: Nuke everything and start over
 
 At any time you can run `reset.sh` to remove all docker containers volumes and networks.
+
+# Party Time!
+
+## Live Stream
+
+Have your DJ stream to Icecast at `http://192.168.1.6:1337/dj` using the password configured inside `icecast.xml` If you change the password be sure to to change it in `radio.liq` too.
+
+## Backup Files
+
+If there is no live DJ, or you are waiting for one to connect, Silent Protest will automatically play media files in the `media/` directory of this repository. If you want to play off a USB flash drive change the mount point of `media` in the `docker-compose.yml` file.
+
+

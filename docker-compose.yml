@@ -9,9 +9,9 @@ services:
             - www
             - stream
         volumes:
-            - ./icecast/icecast.xml:/etc/icecast2/icecast2.xml:ro
+            - ./icecast/icecast.xml:/etc/icecast2/icecast.xml:ro
         ports:
-            - 83:8000
+            - 1337:8000
         restart: always
 
     stream_liquidsoap:
@@ -22,8 +22,6 @@ services:
         volumes:
              - ./liquidsoap/radio.liq:/radio.liq:ro
              - ./media/:/media/radio:ro
-        ports:
-            - 84:8005
         depends_on:
             - stream_icecast
         restart: always
