@@ -14,7 +14,7 @@ set("server.telnet", false)
 backup_stream = mksafe(playlist("/media/"))
 
 # primary input is icecast from DJ
-live_stream = input.http("http://stream_icecast:8000/dj")
+live_stream = input.http(buffer=0.5,max=1.0,timeout=5.0,"http://stream_icecast:8000/dj")
 
 # if live stream is down, use backup_stream
 full_stream = fallback(track_sensitive=false, [live_stream, backup_stream])
@@ -28,4 +28,4 @@ full_stream = smart_crossfade(start_next=0.5, full_stream)
 # transcode to mp3 and send to icecast
 output.icecast(%mp3(bitrate=128, stereo=false), 
   host="stream_icecast", port=8000, password="love",
-  mount="live", full_stream)
+  mount="live", timeout=5.0, full_stream)
