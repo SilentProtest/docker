@@ -2,13 +2,15 @@ FROM armhf/node
 
 MAINTAINER SilentProtest
 
-ADD hublin/ /src
+RUN npm install -g mocha grunt-cli bower karma-cli
 
-RUN npm install -g mocha grunt-cli bower karma-cli && cd /src && npm install --production --unsafe-perm
+RUN git clone --depth 1 --recursive https://github.com/linagora/hublin.git /src
+
+RUN cd /src && npm install --production --unsafe-perm
 
 RUN cd /src/modules/hublin-easyrtc-connector && npm install --production
 
-ADD hublin/config/db.json.docker /src/config/db.json
+RUN cp /src/config/db.json.docker /src/config/db.json
 
 ENV HUBLIN_REDIS_HOST redis
 ENV HUBLIN_REDIS_PORT 6379

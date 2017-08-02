@@ -1,3 +1,0 @@
-[submodule "video/hublin"]
-	path = video/hublin
-	url = https://github.com/linagora/hublin.git

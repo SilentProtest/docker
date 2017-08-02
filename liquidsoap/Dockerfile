@@ -13,4 +13,6 @@ USER liquidsoap
 
 EXPOSE 8005
 
+COPY radio.liq /radio.liq
+
 CMD ["liquidsoap", "/radio.liq"]

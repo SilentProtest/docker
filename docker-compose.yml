@@ -3,7 +3,7 @@ version: '2'
 services:
      
     stream_icecast:
-        image: silentprotest/icecast
+        image: silentprotest/icecast-arm
         build: icecast
         networks:
             - www
@@ -15,47 +15,18 @@ services:
         restart: always
 
     stream_liquidsoap:
-        image: silentprotest/liquidsoap
+        image: silentprotest/liquidsoap-arm
         build: liquidsoap/
         networks:
             - stream
         volumes:
-             - ./liquidsoap/radio.liq:/radio.liq:ro
              - ./media/:/media/radio:ro
         depends_on:
             - stream_icecast
         restart: always
 
-    chat_server:
-        image: silentprotest/lets-chat
-        build: chat/
-        networks:
-            - www
-            - chat_db
-        volumes:
-            - chat_config:/usr/src/app/config
-            - chat_uploads:/usr/src/app/uploads
-        environment:
-            - LCB_DATABASE_URI=mongodb://chat_mongo/letschat
-            - LCB_XMPP_ENABLE=true
-        ports:
-            - 5222:5222
-            - 81:8080
-        depends_on:
-            - chat_mongo
-        restart: always
-
-    chat_mongo:
-        image: jixer/rpi-mongo
-        networks:
-            - chat_db
-        volumes:
-            - chat_mongo_data:/data/db
-            - chat_mongo_config:/data/configdb
-        restart: always
-
     video_server:
-        image: silentprotest/hublin
+        image: silentprotest/hublin-arm
         build: video/
         networks:
             - www
@@ -70,7 +41,8 @@ services:
         restart: always
 
     video_mongo:
-        image: jixer/rpi-mongo
+        image: silentprotest/mongo-arm
+        build: mongo/
         networks:
             - video_db
         volumes:
@@ -91,6 +63,7 @@ services:
         networks:
             - www
         volumes:
+            - ./www/nginx.conf:/etc/nginx/nginx.conf:ro
             - ./www/conf.d/:/etc/nginx/conf.d/:ro
             - ./www/party/html:/usr/share/nginx/html:ro
             - ./www/fullchain.pem:/ssl.crt:ro
@@ -103,16 +76,11 @@ services:
 
 
 networks:
-    chat_db:
     video_db:
     stream:
     www:
 
 volumes:
-    chat_config: {}
-    chat_uploads: {}
-    chat_mongo_data: {}
-    chat_mongo_config: {}
     video_mongo_data: {}
     video_mongo_config: {}
     video_redis_data: {}
